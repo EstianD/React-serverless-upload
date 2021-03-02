@@ -1,6 +1,8 @@
+import React from "react";
 import axios from "axios";
 import * as AWS from "aws-sdk";
 import { v4 as uuidv4 } from "uuid";
+import useUploadFile from "./useUploadFile";
 
 const {
   REACT_APP_AWS_URL,
@@ -16,10 +18,12 @@ const s3 = new AWS.S3({
 
 const bucket = "js-uploader-storage";
 
-export default async function upload(data) {
+export default async function uploadFile(data, dropArea) {
+  const [loaded, setLoaded] = useUploadFile(0);
   console.log("UPLOADING");
   //   console.log(REACT_APP_AWS_URL);
   console.log(data);
+  console.log(dropArea);
 
   //   console.log(params);
 
@@ -37,13 +41,15 @@ export default async function upload(data) {
       const resp = await s3
         .upload(params)
         .on("httpUploadProgress", ({ loaded, total }) => {
-          console.log(
-            "Progress: ",
-            loaded,
-            "/",
-            total,
-            `${Math.round((100 * loaded) / total)}%`
-          );
+          setLoaded(loaded);
+          console.log(loaded);
+          //  console.log(
+          //    "Progress: ",
+          //    loaded,
+          //    "/",
+          //    total,
+          //    `${Math.round((100 * loaded) / total)}%`
+          //  );
         })
         .promise();
       console.log(resp);
@@ -67,18 +73,4 @@ export default async function upload(data) {
       console.log("ERROR UPLOADING");
     }
   }
-  //   await s3.putObject(params);
-
-  //   console.log(data);
-  //   const { files } = data;
-  //   console.log(files);
-  //   for (let i = 0; i < data.length; i++) {
-  //     console.log(data[i]);
-
-  //     try {
-  //       //  await s3.putObject({
-  //       //     Body:
-  //       //  });
-  //     } catch (err) {}
-  //   }
 }

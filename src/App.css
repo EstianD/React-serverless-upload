@@ -42,6 +42,34 @@
   line-height: 300px;
 }
 
+#inner-div {
+  /* margin: auto; */
+  /* margin-top: 100px; */
+  /* width: 50%; */
+  /* border: 1px solid #d4d4d4; */
+  /* padding: 10px; */
+  margin-left: -12px;
+  margin-top: -12px;
+  height: 320px;
+  width: 320px;
+  position: absolute;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 300px;
+  z-index: -10;
+  background: linear-gradient(
+    to right,
+    #fff 20%,
+    #fff 40%,
+    #0cc74a 50%,
+    #34b4f0 55%,
+    #fff 70%,
+    #fff 100%
+  );
+  overflow: hidden;
+  animation: spin 3s linear infinite;
+}
+
 #file-drop-area:hover {
   box-shadow: 0 2px 6px 0 rgba(66, 66, 66, 0.6),
     0 3px 10px 0 rgba(66, 66, 66, 0.6);
@@ -70,6 +98,42 @@
   height: 280px;
   justify-content: center;
   vertical-align: middle;
+  /* z-index: 99999; */
   /* line-height: 1.5; */
   /* text-align: center; */
+}
+
+.upload-form {
+  z-index: 1;
+  /* background-color: white; */
+  border-radius: 50%;
+}
+
+.upload-button {
+  background-color: white;
+  border-radius: 50%;
+}
+
+.dropped {
+  border: 2px solid #d4d4d4;
+  /*animation-name: filling;
+  animation-duration: 3s;
+  animation-delay: 0s;
+  animation-fill-mode: forwards;
+  background: linear-gradient(to right, green 50%, transparent 0);
+  background-size: 200% 100%;
+  background-position: right; */
+  /* background: green; */
+  /* animation: loadCircle 3s; */
+  /* transition: transform 1s;
+  transform: scale(0.5); */
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
