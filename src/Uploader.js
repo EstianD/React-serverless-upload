@@ -2,11 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import * as AWS from "aws-sdk";
 import { v4 as uuidv4 } from "uuid";
 
-const {
-  REACT_APP_AWS_URL,
-  REACT_APP_AWS_ID,
-  REACT_APP_AWS_SECRET,
-} = process.env;
+const { REACT_APP_AWS_ID, REACT_APP_AWS_SECRET } = process.env;
 
 // Create AWS S3 instance
 const s3 = new AWS.S3({
@@ -21,6 +17,7 @@ function Uploader() {
 
   const dropArea = useRef();
   const innerArea = useRef();
+  const uploadTextRef = useRef();
   const [status, setStatus] = useState("Select files to upload");
 
   //   Upload function
@@ -63,7 +60,7 @@ function Uploader() {
   const handleDragLeave = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    dropArea.current.className = "";
+    dropArea.current.className = "file-drop-normal";
   };
 
   const handleDragOver = (e) => {
@@ -91,6 +88,8 @@ function Uploader() {
         formData.append("files", files[i]);
       }
       setStatus("Uploading");
+      innerArea.current.className = "spinning-elem";
+      uploadTextRef.current.className = "uploadingText";
 
       // Ticker variable to create uploading... effect
       // Set ticker for the times the interval has looped through the array
@@ -117,8 +116,11 @@ function Uploader() {
           clearInterval(uploadLoader);
           //  Set status to complete
           setStatus("Upload Complete");
+          innerArea.current.className = "";
           //  Clear message after 3sec
           setTimeout(() => {
+            uploadTextRef.current.className = "";
+            dropArea.current.className = "file-drop-normal";
             setStatus("Select files to upload");
           }, 3000);
         }
@@ -130,8 +132,7 @@ function Uploader() {
     <div
       id="file-drop-area"
       ref={dropArea}
-      className={dragOver ? "dragover" : null}
-      // onDragEnter={handleDragEnter}
+      className={dragOver ? "dragover" : "file-drop-normal"}
       onDragLeave={handleDragLeave}
       onDragOver={handleDragOver}
       onDrop={handleOnDrop}
@@ -141,7 +142,7 @@ function Uploader() {
         <input type="file" id="fileElem" multiple accept="image/*" />
         <label id="upload-text" className="upload-button" htmlFor="fileElem">
           {/* Select some files */}
-          {status && <span>{status}</span>}
+          {status && <span ref={uploadTextRef}>{status}</span>}
         </label>
       </form>
     </div>
